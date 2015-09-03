@@ -1,13 +1,22 @@
-#PIP
+#What is PageStudio
 
-PIP is a tiny application framework built for people who use a LAMP stack. PIP aims to be as simple as possible to set up and use.
+PageStudio is a tiny Application Development Framework built for people who use a LAMP stack. 
+It aims to be as simple as possible to set up and use.
 
 Visit [http://gilbitron.github.com/PIP](http://gilbitron.github.com/PIP/) for more information and documentation.
 
-## Requirements
+## Release Information
 
-* PHP 5.1 or greater
-* MySQL 4.1.2 or greater
+Currently not released. We are working realy hard to make this available soon. 
+
+## Changelog and New Features
+
+This information will be available once released.
+
+## Server Requirements
+
+* PHP version 5.5 or newer is recommended. 
+* MySQL 5.0 or greater is recommended.
 * The mod_rewrite Apache module
 
 ## Installation
@@ -24,4 +33,6 @@ Visit [http://gilbitron.github.com/PIP](http://gilbitron.github.com/PIP/) to see
 
 PIP is released under the MIT license.
 
-Want to say thanks? [Consider tipping me](https://www.gittip.com/gilbitron).
+## Acknowledgement
+
+The CosmoInteractive team would like to thank gilbitron (https://www.gittip.com/gilbitron) who authored the PIP PHP framework that gave birth to this one.
