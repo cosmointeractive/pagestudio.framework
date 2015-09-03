@@ -80,9 +80,7 @@ class Router
      * @return       void
 	 */
     public function __construct($uri, $routes = array())
-    {
-        global $config;
-        
+    {        
         $this->routes = $routes;
         
         // Store the original uri 
@@ -92,8 +90,8 @@ class Router
         $this->segments = explode('/', $uri);
         
         // Do our default checks
-        $this->default_controller  = $config['default_controller'];
-        $this->error_controller    = $config['error_controller'];
+        $this->default_controller  = Config::get('default_controller');
+        $this->error_controller    = Config::get('error_controller');
         $this->controller          = ( ! empty($this->segments[0])) ? $this->segments[0] : $this->default_controller;
         $this->method              = (isset($this->segments[1]) && ! empty($this->segments[1]) !== '') 
                                         ? $this->segments[1] : 'index';
@@ -189,12 +187,12 @@ class Router
     public function dispatch()
     {        
         // Get our controller file
-        $path = APP_DIR . 'controllers/' . $this->controller . '.php';
+        $path = APPPATH . 'controllers/' . $this->controller . '.php';
         
         if(file_exists($path)) {
             require_once $path;
         } else {
-            require_once APP_DIR . 'controllers/' . $this->error_controller . '.php';
+            require_once APPPATH . 'controllers/' . $this->error_controller . '.php';
         }
         
         // Check the action exists
@@ -202,7 +200,7 @@ class Router
             $this->controller   = $this->error_controller;
             $this->method       = 'index';
             
-            require_once APP_DIR . 'controllers/' . $this->controller . '.php';
+            require_once APPPATH . 'controllers/' . $this->controller . '.php';
         }
         
         // Create object and call method
