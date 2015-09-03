@@ -1,0 +1,3 @@
+#Libraries
+
+libraries: Utility classes where object state is important (payment gateways, authentication, etc.)
