@@ -1,6 +1,12 @@
 <?php
 
 class Controller {
+    
+    public function __construct()
+    {
+        $this->benchmark = new Benchmark();
+        $this->benchmark->mark('code_start');
+    }
 	
 	public function loadModel($name)
 	{

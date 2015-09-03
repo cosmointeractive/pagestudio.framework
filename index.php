@@ -156,7 +156,7 @@ if (defined('ENVIRONMENT')) {
  *
  * And away we go...
  */
-require BASEPATH .'pip.php';
+require BASEPATH .'core/pip.php';
 
 /* End of file index.php */
 /* Location: ./index.php */

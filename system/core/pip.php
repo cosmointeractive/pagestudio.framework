@@ -34,11 +34,11 @@ $url = '';
 // Includes
 require APPPATH  . 'config/config.php';
 // require APPPATH . 'config/autoload.php';
-require BASEPATH . 'Benchmark.php';
-require BASEPATH . 'router.php';
-require BASEPATH . 'model.php';
-require BASEPATH . 'view.php';
-require BASEPATH . 'controller.php';
+require BASEPATH . 'core/Benchmark.php';
+require BASEPATH . 'core/router.php';
+require BASEPATH . 'core/model.php';
+require BASEPATH . 'core/view.php';
+require BASEPATH . 'core/controller.php';
 // require SYSDIR  . '/autoloader.php';
 
 // Define absolute path
@@ -63,7 +63,7 @@ if($request_url != $script_url) {
 }     
 
 /**
- * Testing the class
+ * Get Router
  */
 // $uri = isset($_GET['uri']) ? $_GET['uri'] : null;
 $router = new Router($url, $config['routes']);
