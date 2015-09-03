@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+	<!-- Basic Page Needs
+	================================================== -->
+	<meta charset="utf-8">
+    <title>Router - Documentation</title>
+
+    <meta name="description" content="">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<!-- Mobile Specific Metas
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	================================================== -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+	
+	<!-- CSS
+	<link rel="stylesheet" href="../assets/css/import.css">
+	================================================== -->
+	
+    <link rel="alternate" type="application/rss+xml" title="egrappler.com" href="feed/index.html">
+    <link href="http://fonts.googleapis.com/css?family=Raleway:700,400,300" rel="stylesheet" type="text/css">
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/prettify.css">
+
+    <script src="js/jquery.min.js"></script> 
+    <script src="js/prettify/prettify.js" type="text/javascript"></script> 
+    <!-- <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?lang=css&skin=sunburst"></script> -->
+    <script src="js/layout.js"></script>
+    <script src="js/jquery.localscroll-1.2.7.js" type="text/javascript"></script>
+    <script src="js/jquery.scrollTo-1.4.3.1.js" type="text/javascript"></script>
+    <script src="js/functions.js" type="text/javascript"></script>
+    <script src="js/nav.js" type="text/javascript"></script>
+
+	<!-- Favicon
+	================================================== -->
+	<link rel="shortcut icon" href="assets/ico/favicon.ico">
+	<link rel="apple-touch-icon" sizes="57x57" href="assets/ico/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="assets/ico/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="assets/ico/apple-touch-icon-114x114.png">
+
+</head>
+<body>
+
+    <nav>
+        <div class="menu-wrapper">
+            <h1 class="logo">Doc</h1>
+            <div id="menu">
+                <ul class="toplinks">
+                    <li><a href="#">Docs</a></li>
+                    <li><a href="#">Website</a></a></li>
+                </ul>
+            </div>
+            <a id="menu-toggle" href="#" class=" ">&#9776;</a> 
+        </div>
+    </nav>
+    
+    <!-- START NAVIGATION -->
+    <div id="nav">
+        <div id="nav_inner">
+            <script type="text/javascript">create_menu('null');</script>
+        </div>
+    </div>
+    <div id="nav2">
+        <a name="top">&nbsp;</a>
+        <a href="#" id="toggle_toc">Table of Contents</a>
+    </div>
+    <!--
+    <header class="docs-hero">
+        <div class="container">
+            <h2 class="docs-header"> Page Studio - Documentation</h2>
+        </div>
+    </header>
+    -->
+    <section>
+        <div class="container">
+            <ul class="docs-nav" id="menu-left">
+                <li><strong>Getting Started</strong></li>
+                <li><a href="#introduction" class=" ">Instroduction</a></li>
+                <li><a href="#wildcards" class=" ">Wildcards</a></li>
+                <li><a href="#examples" class=" ">Examples</a></li>
+            </ul>
+            
+            <div class="docs-content">
+            
+                <header class="doc-title">
+                    <h1>URI Router Documentation</h1>
+                </header>
+                <hr />                
+
+                <article class="article">
+                    <h1 class="article-title" id="introduction">Introduction</h1>
+                    <p>Typically there is a one-to-one relationship between a URL string and its corresponding controller class/method. The segments in a URI normally follow this pattern:</p>
+
+<pre class="prettyprint lang-php">
+example.com/class/function/id/
+</pre>
+                    
+                    <p>In some instances, however, you may want to remap this relationship so that a different class/function can be called instead of the one corresponding to the URL.
+
+                    For example, lets say you want your URLs to have this prototype:<br />
+<pre class="prettyprint lang-php">
+example.com/product/1/
+example.com/product/2/
+example.com/product/3/
+example.com/product/4/
+</pre>
+                    Normally the second segment of the URL is reserved for the function name, but in the example above it instead has a product ID. To overcome this, CodeIgniter allows you to remap the URI handler.</p>
+                
+                    <p class="article-lead">Setting Your Own Rules</p>
+                    <p>Routing rules are defined in your <var>application/config/config.php</var> file. In it you'll see an array called <var>routes</var> that permits you to specify your own routing criteria. Routes can either be specified using <var>wildcards</var> or <var>Regular Expressions</var></p>
+                </article>
+                
+                <!-- ====== WILDCARDS ============================================ -->
+                
+                <article class="article">
+                    <h1 class="article-title" id="wildcards">Wildcards</h1>
+
+                    <p>A typical wildcard route might look something like this:</p>
+                    <h3 class="article-subtitle">Example</h3>
+<pre class="prettyprint lang-php">
+Config::set('routes') = ['product/:num'] => "catalog/product_lookup";
+</pre>
+
+In a route, the array key contains the URI to be matched, while the array value contains the destination it should be re-routed to. In the above example, if the literal word "product" is found in the first segment of the URL, and a number is found in the second segment, the "catalog" class and the "product_lookup" method are instead used.<br />
+
+You can match literal values or you can use two wildcard types:<br />
+
+<var>(:num)</var> will match a segment containing only numbers.<br/>
+<var>(:any)</var> will match a segment containing any character.
+
+<p class="important"><b>Note:</b> Routes will run in the order they are defined. Higher routes will always take precedence over lower ones.<p>                 
+                    
+                    <h3 id="examples">Here are a few routing examples:</h3>
+                    <h3 class="article-subtitle">Examples</h3>
+<pre class="prettyprint lang-php">
+Config::set('routes') = ['journals'] => "blogs";
+</pre>
+                    <p>A URL containing the word "journals" in the first segment will be remapped to the "blogs" class.</p>
+<pre class="prettyprint lang-php">
+Config::set('routes') = ['blog/joe'] => "blogs/users/34";
+</pre>
+                    <p>A URL containing the segments blog/joe will be remapped to the "blogs" class and the "users" method. The ID will be set to "34".</p>
+<pre class="prettyprint lang-php">
+Config::set('routes') = ['product/(:any)'] => "catalog/product_lookup";
+</pre>
+                    <p>A URL with "product" as the first segment, and anything in the second will be remapped to the "catalog" class and the "product_lookup" method.</p>
+<pre class="prettyprint lang-php">
+Config::set('routes') = ['product/(:num)'] => "catalog/product_lookup_by_id/$1";
+</pre>
+                    <p>A URL with "product" as the first segment, and a number in the second will be remapped to the "catalog" class and the "product_lookup_by_id" method passing in the match as a variable to the function.</p>
+
+                    <p class="important"><b>Important:</b> Do not use leading/trailing slashes.</p>                    
+                    
+                </article>
+
+            </div> <!-- End .docs-content -->
+        </div><!-- End .container -->
+    </section>
+
+    <footer>
+        <div class="container">
+            <p> &copy; 2015 PageStudio.com </p>
+        </div>
+    </footer>
+    
+</body>
+</html>

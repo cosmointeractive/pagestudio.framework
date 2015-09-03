@@ -25,6 +25,9 @@
  * @param    string $class Object name to be invoked 
  */
 spl_autoload_register(function($fileName) {
+    
+    $fileName = ucfirst($fileName);
+    
     if (file_exists(SYSDIR . '/libraries/' . $fileName . '.php')) {
         require_once SYSDIR . '/libraries/' . $fileName . '.php';        
     } 
