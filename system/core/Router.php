@@ -80,9 +80,7 @@ class Router
      * @return       void
 	 */
     public function __construct($uri, $routes = array())
-    {
-        global $config;
-        
+    {        
         $this->routes = $routes;
         
         // Store the original uri 
@@ -92,8 +90,8 @@ class Router
         $this->segments = explode('/', $uri);
         
         // Do our default checks
-        $this->default_controller  = $config['default_controller'];
-        $this->error_controller    = $config['error_controller'];
+        $this->default_controller  = Config::get('default_controller');
+        $this->error_controller    = Config::get('error_controller');
         $this->controller          = ( ! empty($this->segments[0])) ? $this->segments[0] : $this->default_controller;
         $this->method              = (isset($this->segments[1]) && ! empty($this->segments[1]) !== '') 
                                         ? $this->segments[1] : 'index';

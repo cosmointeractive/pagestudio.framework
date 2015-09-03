@@ -28,25 +28,18 @@
  */
     
 // Set our defaults
-global $config;
 $url = '';
 
 // Includes
 require APPPATH  . 'config/config.php';
-// require APPPATH . 'config/autoload.php';
-require BASEPATH . 'core/Benchmark.php';
-require BASEPATH . 'core/router.php';
-require BASEPATH . 'core/model.php';
-require BASEPATH . 'core/view.php';
-require BASEPATH . 'core/controller.php';
-// require SYSDIR  . '/autoloader.php';
+require APPPATH  . 'config/autoload.php';
+require BASEPATH . 'core/autoloader.php';
 
 // Define absolute path
 define('ABSPATH', str_replace('system/', '', BASEPATH));
 
 // Define base URL
-define ('BASE_URL', $config['base_url']);    
-// define('BASE_URL', Config::get('base_url'));
+define('BASE_URL', Config::get('base_url'));
 
 // Get request url and script url
 $request_url = (isset($_SERVER['REQUEST_URI'])) ? $_SERVER['REQUEST_URI'] : '';
@@ -66,7 +59,7 @@ if($request_url != $script_url) {
  * Get Router
  */
 // $uri = isset($_GET['uri']) ? $_GET['uri'] : null;
-$router = new Router($url, $config['routes']);
+$router = new Router($url, Config::get('routes'));
 $router->dispatch();
 
 // Router::run($url, $config['routes'])->dispatch();
