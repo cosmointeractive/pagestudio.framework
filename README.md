@@ -1,9 +1,7 @@
-#What is PageStudio
+#What is PageStudio.framework
 
-PageStudio is a tiny Application Development Framework built for people who use a LAMP stack. 
-It aims to be as simple as possible to set up and use.
-
-Visit [http://gilbitron.github.com/PIP](http://gilbitron.github.com/PIP/) for more information and documentation.
+A tiny Application Development Framework built for people who use a LAMP stack. 
+It aims to be as simple as possible to set up and use. This is the framework that powers PageStudio CMS.
 
 ## Release Information
 
@@ -21,7 +19,7 @@ This information will be available once released.
 
 ## Installation
 
-* Download PIP and extract
+* Download PageStudio.framework and extract
 * Navigate to `application/config/config.php` and fill in your `base_url`
 * You are ready to rock! Point your browser to your `base_url` and hopefully see a welcome message.
 
