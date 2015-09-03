@@ -29,7 +29,7 @@ Visit [http://gilbitron.github.com/PIP](http://gilbitron.github.com/PIP/) to see
 
 ## License
 
-PIP is released under the MIT license.
+PageStudio.framework is released under the MIT license.
 
 ## Acknowledgement
 
