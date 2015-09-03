@@ -1,0 +1,209 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+	<!-- Basic Page Needs
+	================================================== -->
+	<meta charset="utf-8">
+    <title>Database Qurey Builder - Documentation</title>
+
+    <meta name="description" content="">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<!-- Mobile Specific Metas
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	================================================== -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+	
+	<!-- CSS
+	<link rel="stylesheet" href="../assets/css/import.css">
+	================================================== -->
+	
+    <link rel="alternate" type="application/rss+xml" title="egrappler.com" href="feed/index.html">
+    <link href="http://fonts.googleapis.com/css?family=Raleway:700,400,300" rel="stylesheet" type="text/css">
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/prettify.css">
+
+    <script src="js/jquery.min.js"></script> 
+    <script src="js/prettify/prettify.js" type="text/javascript"></script> 
+    <!-- <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?lang=css&skin=sunburst"></script> -->
+    <script src="js/layout.js"></script>
+    <script src="js/jquery.localscroll-1.2.7.js" type="text/javascript"></script>
+    <script src="js/jquery.scrollTo-1.4.3.1.js" type="text/javascript"></script>
+    <script src="js/functions.js" type="text/javascript"></script>
+    <script src="js/nav.js" type="text/javascript"></script>
+
+	<!-- Favicon
+	================================================== -->
+	<link rel="shortcut icon" href="assets/ico/favicon.ico">
+	<link rel="apple-touch-icon" sizes="57x57" href="assets/ico/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="assets/ico/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="assets/ico/apple-touch-icon-114x114.png">
+
+</head>
+<body>
+
+    <nav>
+        <div class="menu-wrapper">
+            <h1 class="logo">Doc</h1>
+            <div id="menu">
+                <ul class="toplinks">
+                    <li><a href="#">Docs</a></li>
+                    <li><a href="#">Website</a></a></li>
+                </ul>
+            </div>
+            <a id="menu-toggle" href="#" class=" ">&#9776;</a> 
+        </div>
+    </nav>
+    
+    <!-- START NAVIGATION -->
+    <div id="nav">
+        <div id="nav_inner">
+            <script type="text/javascript">create_menu('null');</script>
+        </div>
+    </div>
+    <div id="nav2">
+        <a name="top">&nbsp;</a>
+        <a href="#" id="toggle_toc">Table of Contents</a>
+    </div>
+    <!--
+    <header class="docs-hero">
+        <div class="container">
+            <h2 class="docs-header"> Page Studio - Documentation</h2>
+        </div>
+    </header>
+    -->
+    <section>
+        <div class="container">
+            <ul class="docs-nav" id="menu-left">
+                <li><strong>Getting Started</strong></li>
+                <li><a href="#introduction" class=" ">Instroduction</a></li>
+                <li><a href="#selects" class=" ">Selects</a></li>
+                <li><a href="#inserts" class=" ">Inserts</a></li>
+                <li><a href="#updates" class=" ">Updates</a></li>
+                <li><a href="#deletes" class=" ">Deletes</a></li>
+            </ul>
+            
+            <div class="docs-content">
+            
+                <header class="doc-title">
+                    <h1>Qurey Builder Documentation</h1>
+                </header>
+                <hr />
+                <div class="doc-description" id="whatAndWhy">
+                    <p class="lead">PageStudio is an open source lightweight Content Management Syste (CMS)</p>
+                </div>
+                <hr />                
+
+                <h1 class="article-title" id="introduction">Introduction</h1>
+
+                <p class="article-lead">The database query builder provides a convenient, fluent interface to creating and running database queries. It can be used to perform most database operations in your application, and works on all supported database systems.</p>
+
+                <p class="important"><b>Note:</b> The Page Studio query builder uses PDO parameter binding throughout to protect your application against SQL injection attacks. There is no need to clean strings being passed as bindings.</p>
+
+                <article class="article">
+                    <h1 class="article-title" id="selects">Selects</h1>
+                
+                    <p class="article-lead">Retrieving All Rows From A Table</p>                    
+                    <h3 class="article-subtitle">Example</h3>
+
+<pre class="prettyprint lang-php">&lt;?php 
+    $posts = DB::table('posts')->get(); 
+?&gt;</pre>
+                    <p class="article-lead">Retrieving All Rows From A Table: Where Clause</p>                    
+                    <h3 class="article-subtitle">Example</h3>
+
+<pre class="prettyprint lang-php">&lt;?php 
+    $posts = DB::table('posts')->where('post_status', 'draft')->get();
+?&gt;</pre>
+                    <p class="article-lead">Retrieving A Single Row From A Table</p>                    
+                    <h3 class="article-subtitle">Example</h3>
+
+<pre class="prettyprint lang-php">&lt;?php
+    $post = DB::table('posts')->where('author', 'John')->first();
+?&gt;</pre>
+
+                    <p class="article-lead">Using Where Operators</p>
+                    <p>Only the following <b>operators</b> are acceptable <var>=</var>, <var><</var>, <var>></var>, <var>>=</var>, <var>=<</var><p>
+                    <h3 class="article-subtitle">Example</h3>
+
+<pre class="prettyprint lang-php">&lt;?php
+    $post = DB::table('posts')->where('post_date', '>=', '2015-05-20')->get();
+?&gt;</pre>
+                </article>
+                
+                <!-- ====== INSERTS ============================================ -->
+                
+                <article class="article">
+                    <h1 class="article-title" id="inserts">Inserts</h1>
+                
+                    <p class="article-lead">Inserting Single Records Into A Table</p>                    
+                    <h3 class="article-subtitle">Example</h3>
+
+<pre class="prettyprint lang-php">&lt;?php 
+    DB::table('posts')->insert([
+        'title' => 'Hello World!', 'status' => 'draft'
+    ]);
+?&gt;</pre>
+                    <p class="article-lead">Inserting Multiple Records Into A Table</p>                    
+                    <h3 class="article-subtitle">Example</h3>
+
+<pre class="prettyprint lang-php">&lt;?php 
+    DB::table('posts')->insert([
+        ['post_title' => 'Hello World A!', 'post_status' => 'draft'],
+        ['post_title' => 'Hello World B!', 'post_status' => 'draft']
+    ]);
+?&gt;</pre>
+                    
+                    <p class="important"><b>Note:</b> The <var>[ ]</var> tags in PHP are an alternate way of writing <var>array()</var>. They are an acceptable syntax for the <b>insert()</b> methods.</p>
+                    
+                </article>
+                
+                <!-- ====== UPDATE ============================================ -->
+                
+                <article class="article">
+                    <h1 class="article-title" id="updates">Updates</h1>
+                
+                    <p class="article-lead">Updating Records In A Table</p>                    
+                    <h3 class="article-subtitle">Example</h3>
+
+<pre class="prettyprint lang-php">&lt;?php 
+    DB::table('posts')->where('id', 1)->update(['status' => 'published']);
+?&gt;</pre>                    
+                </article>
+
+                <!-- ====== DELETES ============================================ -->
+                
+                <article class="article">
+                    <h1 class="article-title" id="deletes">Deletes</h1>
+
+                    <p class="article-lead">Deleting Records In A Table</p>                    
+                    <p>Only the following <b>operators</b> are acceptable <var>=</var>, <var><</var>, <var>></var><p>
+                    
+                    <h3 class="article-subtitle">Example</h3>
+<pre class="prettyprint lang-php">&lt;?php 
+    DB::table('posts')->where('id', '<', 36)->delete();
+?&gt;</pre>
+                    <p class="article-lead">Deleting All Records From A Table</p>                    
+                    <h3 class="article-subtitle">Example</h3>
+
+<pre class="prettyprint lang-php">&lt;?php 
+    DB::table('users')->delete();
+?&gt;</pre>
+                </article>
+
+            </div> <!-- End .docs-content -->
+        </div><!-- End .container -->
+    </section>
+
+    <footer>
+        <div class="container">
+            <p> &copy; 2015 PageStudio.com </p>
+        </div>
+    </footer>
+    
+</body>
+</html>
