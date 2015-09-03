@@ -32,14 +32,21 @@ global $config;
 $url = '';
 
 // Includes
-require APP_DIR .'config/config.php';
-require ROOT_DIR .'system/router.php';
-require ROOT_DIR .'system/model.php';
-require ROOT_DIR .'system/view.php';
-require ROOT_DIR .'system/controller.php';
+require APPPATH  . 'config/config.php';
+// require APPPATH . 'config/autoload.php';
+require BASEPATH . 'Benchmark.php';
+require BASEPATH . 'router.php';
+require BASEPATH . 'model.php';
+require BASEPATH . 'view.php';
+require BASEPATH . 'controller.php';
+// require SYSDIR  . '/autoloader.php';
+
+// Define absolute path
+define('ABSPATH', str_replace('system/', '', BASEPATH));
 
 // Define base URL
 define ('BASE_URL', $config['base_url']);    
+// define('BASE_URL', Config::get('base_url'));
 
 // Get request url and script url
 $request_url = (isset($_SERVER['REQUEST_URI'])) ? $_SERVER['REQUEST_URI'] : '';
@@ -63,3 +70,6 @@ $router = new Router($url, $config['routes']);
 $router->dispatch();
 
 // Router::run($url, $config['routes'])->dispatch();
+
+/* End of file pip.php */
+/* Location: ./system/pip.php */

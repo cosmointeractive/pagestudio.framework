@@ -189,12 +189,12 @@ class Router
     public function dispatch()
     {        
         // Get our controller file
-        $path = APP_DIR . 'controllers/' . $this->controller . '.php';
+        $path = APPPATH . 'controllers/' . $this->controller . '.php';
         
         if(file_exists($path)) {
             require_once $path;
         } else {
-            require_once APP_DIR . 'controllers/' . $this->error_controller . '.php';
+            require_once APPPATH . 'controllers/' . $this->error_controller . '.php';
         }
         
         // Check the action exists
@@ -202,7 +202,7 @@ class Router
             $this->controller   = $this->error_controller;
             $this->method       = 'index';
             
-            require_once APP_DIR . 'controllers/' . $this->controller . '.php';
+            require_once APPPATH . 'controllers/' . $this->controller . '.php';
         }
         
         // Create object and call method
