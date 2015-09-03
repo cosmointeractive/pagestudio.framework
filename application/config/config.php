@@ -10,4 +10,14 @@ $config['db_name'] = ''; // Database name
 $config['db_username'] = ''; // Database username
 $config['db_password'] = ''; // Database password
 
-?>
+/**
+ * Map URI to class/method and ID and Page numbers
+ * Must be an array
+ */
+$config['routes'] = array( 
+    'about' => 'main',
+    'blog/pages' => 'main/nope/2',
+    'blog/post' => 'main/index',
+    'blog/post/:num' => 'main/index/2',
+    // 'blog/:any' => 'main/post/'
+);

@@ -1,4 +1,19 @@
 <?php
+/**
+ * PageStudio
+ *
+ * A web application for managing website content. For use with PHP 5.4+
+ * 
+ * This application is based on the PHP framework, 
+ * PIP http://gilbitron.github.io/PIP/. PIP has been greatly altered to 
+ * work for the purposes of our development team. Additional resources 
+ * and concepts have been borrowed from CodeIgniter,
+ * http://codeigniter.com for further improvement and reliability. 
+ *
+ * @package     PageStudio
+ * @author      Cosmo Mathieu <cosmo@cosmointeractive.co>
+ */
+ 
 /*
  * PIP v0.5.3
  */
@@ -7,20 +22,15 @@
 session_start(); 
 
 // Defines
-define('ROOT_DIR', realpath(dirname(__FILE__)) .'/');
-define('APP_DIR', ROOT_DIR .'application/');
+define ('BASEPATH', realpath(dirname(__FILE__)) .'/');
+define ('ROOT_DIR', realpath(dirname(__FILE__)) .'/');
+define ('APP_DIR', ROOT_DIR .'application/');
 
-// Includes
-require(APP_DIR .'config/config.php');
-require(ROOT_DIR .'system/model.php');
-require(ROOT_DIR .'system/view.php');
-require(ROOT_DIR .'system/controller.php');
-require(ROOT_DIR .'system/pip.php');
-
-// Define base URL
-global $config;
-define('BASE_URL', $config['base_url']);
-
-pip();
-
-?>
+/*
+ * --------------------------------------------------------------------
+ * LOAD THE BOOTSTRAP FILE
+ * --------------------------------------------------------------------
+ *
+ * And away we go...
+ */
+require ROOT_DIR .'system/pip.php';
