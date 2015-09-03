@@ -1,26 +1,37 @@
-<?php
-
-class Model {
-
-	private $connection;
-
-	public function __construct()
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+/**
+ * PageStudio
+ *
+ * A web application for managing website content. For use with PHP 5.4+
+ * 
+ * This application is based on the PHP framework, 
+ * PIP http://gilbitron.github.io/PIP/. PIP has been greatly altered to 
+ * work for the purposes of our development team. Additional resources 
+ * and concepts have been borrowed from CodeIgniter,
+ * http://codeigniter.com for further improvement and reliability. 
+ *
+ * @package     PageStudio
+ * @author      Cosmo Mathieu <cosmo@cosmointeractive.co>   
+ */
+ 
+// ------------------------------------------------------------------------
+ 
+/**
+ * Application Model Class
+ *
+ * @package		PageStudio
+ * @author      Cosmo Mathieu <cosmo@cosmointeractive.co>
+ */
+class Model 
+{    
+    /**
+	 * Constructor
+	 *
+	 * @access public
+	 */
+	private function __construct()
 	{
-		global $config;
 		
-		$this->connection = mysql_pconnect($config['db_host'], $config['db_username'], $config['db_password']) or die('MySQL Error: '. mysql_error());
-		mysql_select_db($config['db_name'], $this->connection);
-	}
-
-	public function escapeString($string)
-	{
-		return mysql_real_escape_string($string);
-	}
-
-	public function escapeArray($array)
-	{
-	    array_walk_recursive($array, create_function('&$v', '$v = mysql_real_escape_string($v);'));
-		return $array;
 	}
 	
 	public function to_bool($val)
@@ -42,22 +53,7 @@ class Model {
 	{
 	    return date('Y-m-d H:i:s', $val);
 	}
-	
-	public function query($qry)
-	{
-		$result = mysql_query($qry) or die('MySQL Error: '. mysql_error());
-		$resultObjects = array();
-
-		while($row = mysql_fetch_object($result)) $resultObjects[] = $row;
-
-		return $resultObjects;
-	}
-
-	public function execute($qry)
-	{
-		$exec = mysql_query($qry) or die('MySQL Error: '. mysql_error());
-		return $exec;
-	}
-    
 }
-?>
+
+/* End of file Model.php */
+/* Location: ./system/core/Model.php */
