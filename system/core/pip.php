@@ -26,9 +26,6 @@
  * @author      Cosmo Mathieu <cosmo@cosmointeractive.co>
  * @link		http://pagestudio.com/user_guide/
  */
-    
-// Set our defaults
-$url = '';
 
 // Includes
 require APPPATH  . 'config/config.php';
@@ -40,6 +37,9 @@ define('ABSPATH', str_replace('system/', '', BASEPATH));
 
 // Define base URL
 define('BASE_URL', Config::get('base_url'));
+    
+// Set our defaults
+$url = '';
 
 // Get request url and script url
 $request_url = (isset($_SERVER['REQUEST_URI'])) ? $_SERVER['REQUEST_URI'] : '';
@@ -65,4 +65,4 @@ $router->dispatch();
 // Router::run($url, $config['routes'])->dispatch();
 
 /* End of file pip.php */
-/* Location: ./system/pip.php */
+/* Location: ./system/core/pip.php */
