@@ -17,75 +17,155 @@
 // ------------------------------------------------------------------------
 
 /**
- * Database wrapper
+ * Database query builder | wrapper
  *
- * Provides an abstract method to work with the database using the PDO engine.  
+ * Provides an abstract method to handle common database queries and operations. 
  * Also includes insert, delete, and update methods to simplify work.
  * Based on the YouTube video by phpAcademy on OOP.
  * For further improvements http://www.phpclasses.org/package/8933-PHP-Wrapper-to-access-MySQL-databases-using-PDO.html#view_files/files/57797
+ *
+ * @subpackage Libraries
+ * @link       http://cosmointeractive.co
  */
-class Database 
+class Database
 {
     /**
-     * Private static property 
-     * @access      private
-     * @var         $_instance Store instance of the database
+     * Stores an instance of the database object 
+     * 
+     * @var     object
      */
     private static $_instance = null;     
     
     /**
-     * Private variables 
+     * Store results returned
+     *
+     * @var     int
      */
-    private $_pdo,              // storage for PDO object
-            $_query,            // Stored query
-            $_error = false,    // PDO exception error 
-            $_results,          // Results of the database query
-            $_count = 0;        // Store results returned
+    private $_count = 0;        
     
     /**
-     * Constructor
+     * Error status
+     *
+     * @var     bool
      */
-    private function __construct()
+    private $_error = false;
+    
+    /**
+     * PDO exception error 
+     *
+     * @var     array
+     */
+    private $_errorInfo     = array();
+    
+    /**
+     * Storage for PDO object
+     * 
+     * @var     object 
+     */
+    private $_pdo;
+    
+    /**
+     * Stored query
+     *
+     * @var     string
+     */
+    private $_query;
+    
+    /**
+     * Results of the database query
+     *
+     * @var     array 
+     */
+    private $_results;
+    
+    private $condition      = '';
+    
+    private $clause         = '';
+    
+    private $operators      = array('=', '<', '>', '>=', '<=');
+    
+    private $limit          = 1;
+    
+    private $select_first   = '';
+    
+    /**
+     * The database table to query 
+     * 
+     * @var     string
+     */
+    public $table   = 'null';
+    
+    /**
+     *  Constructor
+     *
+     *  Private constructor as part of the singleton pattern implementation.
+     */
+    public function __construct()
     {
+        $this->connect();
+    }
+    
+    //--------------------------------------------------------------------
+    
+    /**
+     * 
+     * 
+     * Instantiate the PDO object
+     * return      void
+     */
+    private function connect($dbname = null, $host = null, $username = null, $password = null)
+    {
+        $dbname   = ( ! is_null($dbname)) ? $dbname : Config::get('mysql/db');
+        $host     = ( ! is_null($host)) ? $host : Config::get('mysql/host');
+        $username = ( ! is_null($username)) ? $username : Config::get('mysql/username');
+        $password = ( ! is_null($password)) ? $password : Config::get('mysql/password');
+        
         try {
             $this->_pdo = new PDO(
-                'mysql:dbname=' . Config::get('mysql/db') . ';' .
-                'host=' . Config::get('mysql/host'), 
-                Config::get('mysql/username'),   //Username
-                Config::get('mysql/password')    //Password
+                'mysql:dbname=' . $dbname . ';' .
+                'host=' . $host, 
+                $username,
+                $password,
             );
         } catch(PDOException $e) {
             die($e->getMessage());
         }
     }
     
-    /**
-     * Return the database instance object, create the object if not set
-     * 
-     * @access     public
-     * @param      $_instance 
-     * @return     object
-     */
-    public static function getInstance()
-    {
-        if( ! isset(self::$_instance)) {
-            self::$_instance = new Database();
-        }
-        return self::$_instance;
-    }
+    //--------------------------------------------------------------------
     
     /**
-     * Method to prepare SQL statements
+     * Creates or grabs an instance of the object 
+     * 
+     * @param   string $table 
+     * @return  object 
+     */
+    public static function get_instance($table)
+    {
+        if( ! isset(self::$_instance)) {
+            self::$_instance = new DB();
+        }
+        
+        self::$_instance->table = $table;
+        
+        return self::$_instance;
+    }
+
+    //--------------------------------------------------------------------
+    
+    /**
+     * Method to prepared SQL statements, execute, and fetch results
      *
      * @access     public
      * @param      string $sql 
      * @param      array $params Array containing SQL parameters
      * @return     object
      */
-    public function query($sql, $params = array()) 
+    private function query($sql, $params = array()) 
     {
         $x = 1;
         $this->_error = false;
+        
         if($this->_query = $this->_pdo->prepare($sql)) {
             if(count($params)) {
                 foreach($params as $param) {
@@ -99,20 +179,30 @@ class Database
              * and return result sets
              */
             if($this->_query->execute()) {
-                $this->_results = $this->_query->fetchAll(PDO::FETCH_OBJ);
+                // Select single row from db if the "first" method is triggered
+                if($this->select_first) {
+                    $this->_results = $this->_query->fetch(PDO::FETCH_OBJ);
+                } else {
+                    $this->_results = $this->_query->fetchAll(PDO::FETCH_OBJ);
+                }
+                
                 $this->_count = $this->_query->rowCount();
+                
             } else {
                 $this->_error = true;
+                $this->_errorInfo = $this->_query->errorInfo();
             }
         }
         
         return $this;
     }
     
+    //--------------------------------------------------------------------
+    
     /**
-     * Prepare statement 
+     * Method to prepare SQL statements
      *
-     * Provides a quick and simplified method to make conditional queries
+     * Provides a quick and simplified method to make conditional query bindings
      * 
      * @access     public
      * @param      var $action Field to look up
@@ -120,13 +210,12 @@ class Database
      * @param      array $where Array to hold Value of the query
      * @return     Object
      */ 
-    public function action($action, $table, $where = array()) 
+    private function action($action, $table, $where = array()) 
     {
         /**
          * Check that all values are passed in
          */
         if(count($where) === 3) {
-            $operators  = array('=', '<', '>=', '<=');
             
             /**
              * Extract variables from array $where
@@ -134,21 +223,12 @@ class Database
             $field      = $where[0];
             $operator   = $where[1];
             $value      = $where[2];
-            
-            //Check if operator is of allowed type
-            //Perform query if condition is met
-            // if (in_array($operator, $operators)) {
-                // $sql = "{$action} FROM {$table} WHERE {$field} {$operator} ?";
-                // if( ! $this->query($sql, array($value))->error()) {
-                    // return $this;
-                // }
-            // }
-            
+
             /** @note     Adding the ability to do AND statements. */
-            if (in_array($operator, $operators)) {
+            if (in_array($operator, $this->operators)) {
                 if(is_array($value)) {
                     $cnt = 0;
-                    foreach($value as $condition) {
+                    foreach($value as $condition){
                         $x = "{$field} {$operator} ?";
                         if($cnt > 0) {
                             $x .= " AND {$field} {$operator} ?";
@@ -166,89 +246,201 @@ class Database
                 }
             }
         }
+        
+        if(empty($where)) {            
+            $sql = "{$action} FROM {$table}";
+            if( ! $this->query($sql, array())->error()) {
+                return $this;
+            }
+        }
     }
+
+    //--------------------------------------------------------------------
     
-    /**
-     * Return the results of the query
-     * 
-     * @access     public
-     * @param      array $_results
-     * @return     object
-     */ 
-    public function results() 
+    private function sql($param = '')
     {
-        return $this->_results;
+        $param = ( ! empty($param)) ? $param : 'SELECT *'; // The statement partial 
+        
+        if( ! empty($this->clause)) {
+            if(count($this->clause) === 3) {
+                return $this->action($param, $this->table, array(
+                    $this->clause['field'], 
+                    $this->clause['operator'],
+                    $this->clause['value'])
+                );
+                
+            } else {
+                return $this->action($param, $this->table, array(
+                    $this->clause['field'], 
+                    '=', 
+                    $this->clause['value'])
+                );
+            }
+            
+        } else {
+            return $this->action($param, $this->table, '');
+        }
     }
     
+    //--------------------------------------------------------------------
+    
     /**
-     * Prepare statement 
+     * Method to execute raw queries 
+     * 
+     * @todo       Write the functions of this method...
+     * @access     public
+     * @param      $_instance 
+     * @return     object
+     */
+    public static function select($sql = null)
+    {
+        // $query = 
+    }
+    
+    //--------------------------------------------------------------------
+    
+    /**
+     * Prepare statement clause
      *
      * Provides a simplified method to make queries
      * 
-     * @access     public
-     * @param      
-     * @return     
-     */ 
-    public function get($table, $where) 
+     * @access  public
+     * @param   $field 
+     * @param   $value
+     * @param   $optional 
+     * @return  object
+     */
+    public function where($field = '', $value = '', $optional = '') 
     {
-        return $this->action('SELECT *', $table, $where);
+        if( ! empty($optional)) {
+            if (in_array($value, $this->operators)) {
+                $this->clause = array(
+                    'field' => $field,
+                    'operator' => $value,
+                    'value' => $optional
+                ); 
+            }
+        } else {
+            $this->clause = array(
+                'field' => $field,
+                'value' => $value
+            );
+        }
+        
+        return $this;
     }
+
+    //--------------------------------------------------------------------
     
     /**
-     * Method to simplify database object item
-     *
+     * Executes the query and returns the results set 
+     * 
      * @access     public
-     * @param      var $table Database table to access
-     * @param      var $where 
-     * @return     bool
+     * @param      object $_results The results of the query
+     * @return     object
      */ 
-    public function delete($table, $where) 
+    public function get() 
     {
-        return $this->action('DELETE', $table, $where);
+        $this->sql();
+        return $this->_results;
     }
     
+    //--------------------------------------------------------------------
+    
+    /**
+     * Trigger
+     * 
+     * @return void
+     */
+    public function first() 
+    {
+        $this->select_first = 1;
+        $this->sql();
+        return $this->_results;
+    }
+    
+    //--------------------------------------------------------------------
+    
+    /**
+     * 
+     * 
+     * @param [in] $size 
+     * @return void
+     */
+    public function limit($size)
+    {
+        $this->limit = $size;
+        return $this;
+    }
+
+    /**
+     * 
+     * 
+     * @param [in] $order 
+     * @return void
+     */
+    public function sort($order)
+    {
+        $this->order = 'ORDER BY ' . strtoupper(trim($order));
+        return $this;
+    }
+
+    //--------------------------------------------------------------------
+        
     /**
      * Method to insert data into the MySQL table. This function prepares 
      * the sql PDO query, executes it and return true/false respectively
      *
      * @access     public
-     * @param      var $table Database table to access
      * @param      array $fields Fields to update
      * @return     bool
      */
-    public function insert($table, $fields = array()) 
+    public function insert($fields = array()) 
     {
-        //Check if fields has any value
-        if(count($fields)) {
+        $items = count($fields);
+        if($items > 1) {                
+            // Check if is multi-dimentional
+            if(@ is_array($fields[0])) {
+                foreach($fields as $fields) {
+                    $this->insert($fields);
+                    $items = $items - 1;
+                }
+            } 
+        }
+            
+        // Check if fields has any value
+        if($items) {
+
             $keys = array_keys($fields);
             $values = null;
             $x = 1;
             
-            //Bind values in the array to the "?" character 
+            // Bind values in the array to the "?" character 
             foreach($fields as $field) {
                 $values .= "?";
                 if($x < count($fields)) {
                     $values .= ', ';
                 }
                 $x++;
-            }            
-            
-            $sql = "INSERT INTO " . $table . " (`" . implode('`, `', $keys) . "`) VALUES ({$values})";
+            } 
+                        
+            $sql = "INSERT INTO " . $this->table . " (`" . implode('`, `', $keys) . "`) VALUES ({$values})";
 
             if( ! $this->query($sql, $fields)->error()) {
                 return true;
             }
         }
+        
         return false;
     }
+    
+    //--------------------------------------------------------------------
     
     /**
      * Method to update a table record
      *
      * <code>     
-     * Database::getInstance()->update($table, $id, array(
-     *     $field => $value
-     * )
+     *  DB::table('users')->where('id', 1)->update(['post_status' => 'published']);
      * </code>
      *
      * @access     public
@@ -256,7 +448,7 @@ class Database
      * @param      int $id
      * @param      array $fields
      */
-    public function update($table, $id, $fields = array(), $field = 'id') 
+    public function update($fields = array()) 
     {
         //Check if fields has any value
         if(count($fields)) {
@@ -269,41 +461,38 @@ class Database
                     $set .= ', ';
                 }
                 $x++;
-            }            
+            }
             
-            $sql = "UPDATE {$table} SET {$set} WHERE {$field} = {$id}";
-
-            if( ! $this->query($sql, $fields)->error()) {
+            $stmt = "UPDATE {$this->table} SET {$set} WHERE {$this->clause['field']} = {$this->clause['value']}";
+            
+            if( ! $this->query($stmt, $fields)->error()) {
                 return true;
             }
         }
         return false;
     }
     
-    /**
-     * Provides a way to check if a query was successful or not
-     * 
-     * @access     public
-     * @param      int $_count The count of a query attempt
-     * @return     int 
-     */ 
-    public function count() 
-    {
-        return $this->_count;
-    }
+    //--------------------------------------------------------------------
     
     /**
-     * Return PDO Exception errors 
-     * 
+     * Method to delete records from a table
+     *
      * @access     public
-     * @param      int $_error The error count
+     * @param      var $table Database table to access
+     * @param      var $where 
      * @return     bool
      */ 
-    public function error() 
+    public function delete() 
     {
-        return $this->_error;
+        return $this->sql('DELETE');
     }
     
+    //--------------------------------------------------------------------
+    
+    public function error()
+    {
+        $this->_error = true;
+    }
 }
 
 /* End of file Database.php */

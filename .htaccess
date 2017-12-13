@@ -25,7 +25,7 @@ DirectoryIndex index.php index.html
 #---------------------------------------------------------------------- 
 
 <IfModule mod_rewrite.c>
-    # RewriteBase /
+    RewriteBase /
     RewriteEngine On    
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d 

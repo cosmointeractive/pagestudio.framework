@@ -1,0 +1,297 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Shipping &mdash; PS Framework 1.1.0 documentation</title>
+  
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,600,600i" rel="stylesheet"> 
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index" href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="PS Framework 1.1.0 documentation" href="../index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+    <div class="wy-grid-for-nav">
+
+        
+        <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+            <div class="wy-side-scroll">
+            
+                <div class="wy-side-nav-search">
+                  
+
+                  
+                    
+                    <a href="../index.html"> PS Framework
+                  
+
+                  
+                  </a>
+
+                  
+                    
+                    
+                      <div class="version">
+                        1.1.0
+                      </div>
+                    
+                  
+                  
+                  
+                  
+
+                  
+                </div>
+
+                <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                  
+                    
+                    
+                        <ul>
+<li class="toctree-l1"><a class="reference internal" href="../general/welcome.html">Welcome</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general/roadmap.html">Road Map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general/license.html">License Agreement</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../developer/index.html">Developer Guide</a></li>
+</ul>
+
+                    
+                  
+                </div>
+            </div>
+        </nav>
+
+        <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+            
+            <header class="wy-nav-content-header">
+            
+                <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+                    <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+                    <a href="../index.html">PS Framework</a>
+                </nav>
+                
+            </header>
+
+            
+            <div class="wy-nav-content">
+            
+                
+<div role="search">
+  <form id="rtd-search-form" class="wy-form search-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search documentation..." />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+                
+                
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+    <li>Shipping</li>
+    <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/documentation/shipping.txt" rel="nofollow"> View page source</a>
+          
+        
+    </li>
+  </ul>
+</div>
+                
+                <div class="rst-content">
+                    <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+                        <div itemprop="articleBody">
+                            
+  <div class="section" id="shipping">
+<h1>Shipping<a class="headerlink" href="#shipping" title="Permalink to this headline">¶</a></h1>
+<p>There are a number of methods for specifying shipping. For starters,
+there are 3 variables you can set for calculating shipping:
+<strong>shippingFlatRate</strong>, <strong>shippingQuantityRate</strong>, and
+<strong>shippingTotalRate</strong>. You can also set a <strong>shippingCustom</strong> function.
+<em>These 4 methods will be added up to create the total shipping cost</em></p>
+<p>To set a basic flat rate shipping, you can use <strong>shippingFlatRate</strong>.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span></span><span class="nx">simpleCart</span><span class="p">({</span>
+    <span class="nx">shippingFlatRate</span><span class="o">:</span> <span class="mi">10</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>Remember, you can set this variable at any time. (It may be useful to
+change it when a user sets their shipping state or country)</p>
+<p>For a shipping rate based on the total quantity of the cart
+(i.e. shipping quantity rate of $3 = $21 for 7 items), use
+<strong>shippingQuantityRate</strong>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">simpleCart</span><span class="p">({</span>
+    <span class="n">shippingQuantityRate</span><span class="p">:</span> <span class="mi">3</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>If you want a shipping rate that is a percentage of the total cost of
+the cart, use <strong>shippingTotalRate</strong>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">simpleCart</span><span class="p">({</span>
+    <span class="n">shippingTotalRate</span><span class="p">:</span> <span class="mf">0.1</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>You can also add a custom function that returns a shipping cost based on
+arbitrary criteria. Let?s say you wanted to have the cost of shipping be
+$10, unless there are more than 20 items in the cart:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">simpleCart</span><span class="p">({</span>
+    <span class="n">shippingCustom</span><span class="p">:</span> <span class="n">function</span><span class="p">(){</span>
+         <span class="k">if</span><span class="p">(</span> <span class="n">simpleCart</span><span class="o">.</span><span class="n">quantity</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">20</span> <span class="p">){</span>
+              <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+         <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+              <span class="k">return</span> <span class="mi">10</span><span class="p">;</span>
+         <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>You can also set this custom shipping function using a shortcut in the
+.shipping() function:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">simpleCart</span><span class="o">.</span><span class="n">shipping</span><span class="p">(</span><span class="n">function</span><span class="p">(){</span>
+    <span class="k">if</span><span class="p">(</span> <span class="n">simpleCart</span><span class="o">.</span><span class="n">quantity</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">20</span> <span class="p">){</span>
+         <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+         <span class="k">return</span> <span class="mi">10</span><span class="p">;</span>
+     <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>If you want to calculate shipping based on the individual items, you can
+modify the simpleCart.Item object to have items calculate their own
+shipping.  Let?s say you wanted to have the shipping for each item be 2
+if the item?s size is ?small?, and 5 if the size is anything else:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">simpleCart</span><span class="o">.</span><span class="n">Item</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">shipping</span> <span class="o">=</span> <span class="n">function</span><span class="p">(){</span>
+     <span class="k">if</span><span class="p">(</span> <span class="n">this</span><span class="o">.</span><span class="n">get</span><span class="p">(</span> <span class="s1">&#39;size&#39;</span> <span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;small&quot;</span> <span class="p">){</span>
+         <span class="k">return</span> <span class="n">this</span><span class="o">.</span><span class="n">quantity</span><span class="p">()</span><span class="o">*</span><span class="mi">2</span><span class="p">;</span>
+     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+         <span class="k">return</span> <span class="n">this</span><span class="o">.</span><span class="n">quantity</span><span class="p">()</span><span class="o">*</span><span class="mi">5</span><span class="p">;</span>
+     <span class="p">}</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>Of course, you could achieve the same effect by creating a custom
+shipping method for simpleCart that iterates through all the items:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">simpleCart</span><span class="o">.</span><span class="n">shipping</span><span class="p">(</span><span class="n">function</span><span class="p">(){</span>
+  <span class="n">var</span> <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="n">simpleCart</span><span class="o">.</span><span class="n">each</span><span class="p">(</span> <span class="n">function</span><span class="p">(</span> <span class="n">item</span> <span class="p">){</span>
+    <span class="k">if</span><span class="p">(</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;size&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;small&#39;</span> <span class="p">)[</span>
+      <span class="n">total</span><span class="o">+=</span> <span class="n">item</span><span class="o">.</span><span class="n">quantity</span><span class="p">()</span><span class="o">*</span><span class="mi">2</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="n">total</span><span class="o">+=</span> <span class="n">item</span><span class="o">.</span><span class="n">quantity</span><span class="p">()</span><span class="o">*</span><span class="mi">5</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+  <span class="k">return</span> <span class="n">total</span><span class="p">;</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>If you want to see what the total shipping is at any time, you can call
+the .shipping() method and the total from all of the aforementioned
+methods will be returned:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">simpleCart</span><span class="o">.</span><span class="n">shipping</span><span class="p">();</span> <span class="o">//</span> <span class="n">returns</span> <span class="n">current</span> <span class="n">shipping</span> <span class="n">cost</span>
+</pre></div>
+</div>
+</div>
+
+
+                        </div>
+                    </div>
+                    <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Cosmo Interactive.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+                </div>
+            </div>
+
+        </section>
+
+    </div>
+    
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
